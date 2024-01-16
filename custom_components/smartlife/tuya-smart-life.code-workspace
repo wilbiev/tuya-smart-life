@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "tuya-device-sharing-sdk",
+			"path": "../../../tuya-device-sharing-sdk"
+		}
+	],
+	"settings": {}
+}

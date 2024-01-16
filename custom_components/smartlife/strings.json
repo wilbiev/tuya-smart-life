@@ -51,6 +51,20 @@
           "led": "LED"
         }
       },
+      "led_type_2": {
+        "state": {
+          "halogen": "[%key:component::tuya::entity::select::led_type::state::halogen%]",
+          "incandescent": "[%key:component::tuya::entity::select::led_type::state::incandescent%]",
+          "led": "[%key:component::tuya::entity::select::led_type::state::led%]"
+        }
+      },
+      "led_type_3": {
+        "state": {
+          "halogen": "[%key:component::tuya::entity::select::led_type::state::halogen%]",
+          "incandescent": "[%key:component::tuya::entity::select::led_type::state::incandescent%]",
+          "led": "[%key:component::tuya::entity::select::led_type::state::led%]"
+        }
+      },
       "light_mode": {
         "state": {
           "none": "[%key:common::state::off%]",
@@ -176,6 +190,19 @@
           "level_8": "Level 8",
           "level_9": "Level 9",
           "level_10": "Level 10"
+        }
+      },
+      "weather_delay": {
+        "name": "Weather delay",
+        "state": {
+          "cancel": "Cancel",
+          "24h": "24h",
+          "48h": "48h",
+          "72h": "72h",
+          "96h": "96h",
+          "120h": "120h",
+          "144h": "144h",
+          "168h": "168h"
         }
       },
       "humidifier_moodlighting": {

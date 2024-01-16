@@ -430,6 +430,14 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
             entity_category=EntityCategory.CONFIG,
         ),
     ),
+    # Smart Water Timer
+    "sfkzq": (
+        SwitchEntityDescription(
+            key=DPCode.SWITCH,
+            name="switch",
+            icon="mdi:sprinkler-variant",
+        ),
+    ),
     # Siren Alarm
     # https://developer.tuya.com/en/docs/iot/categorysgbj?id=Kaiuz37tlpbnu
     "sgbj": (
@@ -573,6 +581,13 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
             entity_category=EntityCategory.CONFIG,
         ),
     ),
+    # Air Conditioner Mate (Smart IR Socket)
+    "wnykq": (
+        SwitchEntityDescription(
+            key=DPCode.SWITCH,
+            name=None,
+        ),
+    ),
     # SIREN: Siren (switch) with Temperature and humidity sensor
     # https://developer.tuya.com/en/docs/iot/f?id=Kavck4sr3o5ek
     "wsdcg": (
@@ -705,7 +720,7 @@ SWITCHES["cz"] = SWITCHES["pc"]
 
 
 async def async_setup_entry(
-        hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up smartlife sensors dynamically through smartlife discovery."""
     hass_data: HomeAssistantSmartLifeData = hass.data[DOMAIN][entry.entry_id]
@@ -738,10 +753,10 @@ class SmartLifeSwitchEntity(SmartLifeEntity, SwitchEntity):
     """Smart Life Switch Device."""
 
     def __init__(
-            self,
-            device: CustomerDevice,
-            device_manager: Manager,
-            description: SwitchEntityDescription,
+        self,
+        device: CustomerDevice,
+        device_manager: Manager,
+        description: SwitchEntityDescription,
     ) -> None:
         """Init SmartLifeHaSwitch."""
         super().__init__(device, device_manager)

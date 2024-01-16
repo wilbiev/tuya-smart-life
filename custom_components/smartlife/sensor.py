@@ -518,6 +518,18 @@ SENSORS: dict[str, tuple[SmartLifeSensorEntityDescription, ...]] = {
         ),
         *BATTERY_SENSORS,
     ),
+    # Smart Water Timer
+    "sfkzq": (
+        # Total seconds of irrigation. Read-write value; the device appears to ignore the write action (maybe firmware bug)
+        TuyaSensorEntityDescription(
+            key=DPCode.TIME_USE,
+            name="Total_watering_time",
+            icon="mdi:history",
+            state_class=SensorStateClass.TOTAL_INCREASING,
+            entity_category=EntityCategory.DIAGNOSTIC,
+        ),
+        *BATTERY_SENSORS,
+    ),
     # Water Detector
     # https://developer.tuya.com/en/docs/iot/categorysj?id=Kaiuz3iub2sli
     "sj": BATTERY_SENSORS,
@@ -1016,6 +1028,7 @@ SENSORS: dict[str, tuple[SmartLifeSensorEntityDescription, ...]] = {
         ),
     ),
     # eMylo Smart WiFi IR Remote
+    # Air Conditioner Mate (Smart IR Socket)
     "wnykq": (
         SmartLifeSensorEntityDescription(
             key=DPCode.VA_TEMPERATURE,
@@ -1028,6 +1041,30 @@ SENSORS: dict[str, tuple[SmartLifeSensorEntityDescription, ...]] = {
             name="Humidity",
             device_class=SensorDeviceClass.HUMIDITY,
             state_class=SensorStateClass.MEASUREMENT,
+        ),
+        SmartLifeSensorEntityDescription(
+            key=DPCode.CUR_CURRENT,
+            name="Current",
+            device_class=SensorDeviceClass.CURRENT,
+            state_class=SensorStateClass.MEASUREMENT,
+            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
+        ),
+        SmartLifeSensorEntityDescription(
+            key=DPCode.CUR_POWER,
+            name="Power",
+            device_class=SensorDeviceClass.POWER,
+            state_class=SensorStateClass.MEASUREMENT,
+            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
+        ),
+        SmartLifeSensorEntityDescription(
+            key=DPCode.CUR_VOLTAGE,
+            name="Voltage",
+            device_class=SensorDeviceClass.VOLTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
         ),
     ),
     # Dehumidifier

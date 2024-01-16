@@ -115,6 +115,17 @@ LIGHTS: dict[str, tuple[SmartLifeLightEntityDescription, ...]] = {
             brightness=DPCode.BRIGHT_VALUE_1,
         ),
     ),
+    # Filament Light
+    # Based on data from https://github.com/home-assistant/core/issues/106703
+    # Product category mentioned in https://developer.tuya.com/en/docs/iot/oemapp-light?id=Kb77kja5woao6
+    # As at 30/12/23 not documented in https://developer.tuya.com/en/docs/iot/lighting?id=Kaiuyzxq30wmc
+    "dsd": (
+        SmartLifeLightEntityDescription(
+            key=DPCode.SWITCH_LED,
+            color_mode=DPCode.WORK_MODE,
+            brightness=DPCode.BRIGHT_VALUE,
+        ),
+    ),
     # Ceiling Fan Light
     # https://developer.tuya.com/en/docs/iot/fsd?id=Kaof8eiei4c2v
     "fsd": (
@@ -167,6 +178,15 @@ LIGHTS: dict[str, tuple[SmartLifeLightEntityDescription, ...]] = {
     "kg": (
         SmartLifeLightEntityDescription(
             key=DPCode.SWITCH_BACKLIGHT,
+            name="Backlight",
+            entity_category=EntityCategory.CONFIG,
+        ),
+    ),
+    # Air Purifier
+    # https://developer.tuya.com/en/docs/iot/f?id=K9gf46h2s6dzm
+    "kj": (
+        SmartLifeLightEntityDescription(
+            key=DPCode.LIGHT,
             name="Backlight",
             entity_category=EntityCategory.CONFIG,
         ),
@@ -327,6 +347,11 @@ LIGHTS: dict[str, tuple[SmartLifeLightEntityDescription, ...]] = {
             brightness=DPCode.BRIGHT_VALUE,
             color_temp=DPCode.TEMP_VALUE,
         ),
+        SmartLifeLightEntityDescription(
+            key=DPCode.SWITCH_LED,
+            name="light_2",
+            brightness=DPCode.BRIGHT_VALUE_1,
+        ),
     ),
 }
 
@@ -378,9 +403,7 @@ async def async_setup_entry(
                 for description in descriptions:
                     if description.key in device.status:
                         entities.append(
-                            SmartLifeLightEntity(
-                                device, hass_data.manager, description
-                            )
+                            SmartLifeLightEntity(device, hass_data.manager, description)
                         )
 
         async_add_entities(entities)
@@ -499,9 +522,14 @@ class SmartLifeLightEntity(SmartLifeEntity, LightEntity):
                     ),
                 },
             ]
-        elif self._color_data_type and (
+
+        if self._color_data_type and (
             ATTR_HS_COLOR in kwargs
-            or (ATTR_BRIGHTNESS in kwargs and self.color_mode == ColorMode.HS)
+            or (
+                ATTR_BRIGHTNESS in kwargs
+                and self.color_mode == ColorMode.HS
+                and ATTR_COLOR_TEMP not in kwargs
+            )
         ):
             if self._color_mode_dpcode:
                 commands += [
@@ -542,11 +570,7 @@ class SmartLifeLightEntity(SmartLifeEntity, LightEntity):
                 },
             ]
 
-        if (
-            ATTR_BRIGHTNESS in kwargs
-            and self.color_mode != ColorMode.HS
-            and self._brightness
-        ):
+        elif ATTR_BRIGHTNESS in kwargs and self._brightness:
             brightness = kwargs[ATTR_BRIGHTNESS]
 
             # If there is a min/max value, the brightness is actually limited.
